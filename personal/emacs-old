@@ -1,0 +1,326 @@
+;;(load-file "~/my/emacs/xcscope.el")
+;;(require 'xcscope)
+;;(setq cscope-do-not-update-database t)
+;; for older emacs
+;;(load-file "~/my/emacs/prev-next-buffer.el")
+;;(require 'prev-next-buffer) 
+;;(load-file "~/my/emacs/uniq.el")
+;;(load-file "~/my/emacs/grep-buffers.el")
+
+;;custom variables
+(custom-set-variables
+ '(Buffer-menu-buffer+size-width 48)
+ '(buffers-menu-max-size nil)
+ '(case-fold-search t)
+ '(cscope-initial-directory (getenv "MYCS") t)
+ '(current-language-environment "Latin-1")
+ '(default-input-method "latin-1-prefix")
+ '(display-time-mode t nil (time))
+ '(global-font-lock-mode t nil (font-lock))
+ '(kill-whole-line t)
+ '(mouse-buffer-menu-mode-mult 0)
+ '(mouse-yank-at-point t)
+ '(ps-line-number t)
+ '(transient-mark-mode t)
+;; '(buffers-menu-max-size nil)
+;; '(display-time-mode t nil (time))
+;; '(Buffer-menu-buffer+size-width 48)
+)
+
+;; some common C/C++ formatting
+(c-set-offset 'substatement-open 0)
+(setq-default c-basic-offset 4)
+(setq-default tab-width 4)
+(setq-default indent-tabs-mode t)
+;;(setq-default indent-tabs-mode nil)
+;;(setq indent-line-function 'insert-tab)
+
+;; misc
+(setq inhibit-startup-message t)
+(setq scroll-step 1)
+(setq next-line-add-newlines nil)
+(custom-set-faces)
+(delete-selection-mode 1) 
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+
+;; better colors for putty
+;;(load "~/.emacs21-256color-hack.el") 
+
+
+;; Polish stuff
+(setq default-input-method 'polish-slash)
+(prefer-coding-system 'utf-8) 
+(modify-coding-system-alist 'file "\\.html\\'" 'utf-8)
+
+
+;; server mode
+(server-start)
+
+;22.3.1 fix for slow file systems
+(remove-hook 'find-file-hook 'vc-find-file-hook)
+
+;; (desktop-save-mode 1)
+;; (setq desktop-enable t)
+;; (desktop-load-default)
+;; (desktop-read)
+;; (defun desktop-auto-save ()
+;;    "Added to auto-save-hook so the desktop is not lost."
+;;    (desktop-save "~/")
+;;    (message "Wrote desktop.")
+;;    )
+;; (add-hook 'auto-save-hook 'desktop-auto-save t) 
+
+
+
+;new to be merged
+(setq-default line-number-display-limit nil)
+(setq-default line-number-display-limit-width 1024)
+
+;; load files for regexp
+(defun my-load-files-for-regexp (regexp)
+  "Load the files that match REGEXP"
+  (interactive "sRegexp: ")
+  (let ((files (directory-files default-directory t regexp)))
+    (while files
+      (find-file (car files))
+      (setq files (cdr files))))) 
+
+;; dired find file
+(defun my-dired-do-find-file (&optional arg)
+   "Visit all marked files at once."
+   (interactive "P")
+   (let ((file-list (dired-get-marked-files nil arg)))
+     (find-file (car file-list))
+     (setq file-list (cdr file-list))
+     (while file-list
+       (let ((find-file-run-dired t))
+         (find-file (car file-list)))
+       (setq file-list (cdr file-list))))) 
+
+;; what was it?
+(defun my-toggle-case (arg)
+ "Change the case of the char after point."
+ (interactive "*p")
+ (catch 'exit
+  (if (looking-at "[a-z]")
+  (upcase-region (point) (+ (point) arg))
+    (if (looking-at "[A-Z]")
+    (downcase-region (point) (+ (point) arg))
+  (ding)
+  (throw 'exit nil)))
+  (forward-char arg)))
+;;(define-key global-map "\C-`" 'my-toggle-case)
+
+;; reload .emacs
+(defun my-load-dot-emacs ()
+ (interactive)
+ (load-file "~/.emacs"))
+(global-set-key "\C-cl" 'my-load-dot-emacs)
+
+
+;; count words
+(defun my-count-words-region (beginning end)
+  "Print number of words in the region."
+  (interactive "r")
+  (message "Counting words in region ... ")
+
+;;; 1. Set up appropriate conditions.
+  (save-excursion
+    (let ((count 0))
+      (goto-char beginning)
+
+;;; 2. Run the while loop.
+      (while (and (< (point) end)
+                  (re-search-forward "\\w+\\W*" end t))
+        (setq count (1+ count)))
+
+;;; 3. Send a message to the user.
+      (cond ((zerop count)
+             (message
+              "The region does NOT have any words."))
+            ((= 1 count)
+             (message
+              "The region has 1 word."))
+            (t
+             (message
+              "The region has %d words." count))))))
+
+
+
+;; LISP
+;; (setq inferior-lisp-program "/usr/bin/clisp")
+;; (add-to-list 'load-path "/usr/local/slime-2.0")
+;; (require 'slime)
+;; (slime-setup)
+
+;; (setq inferior-lisp-program "/usr/local/acl81_express/alisp")
+;; (add-to-list 'load-path "/usr/local/slime-2.0")
+;; (require 'slime)
+;; (slime-setup)
+
+;; what was it ?????
+(global-set-key
+ (kbd "C-<f10>")
+ (lambda ()
+   (interactive)
+   (let ( (height (frame-height)) )
+     (menu-bar-mode)
+     (set-frame-height (selected-frame)
+                       (if menu-bar-mode
+                           (1- height)
+                         (1+ height)))
+     (force-mode-line-update t))))
+
+
+;;;;;;;; OLD
+
+
+;;;;;;;;;;;;; used before - Unix
+
+;; (global-set-key [f35] 'scroll-up)
+;; (global-set-key [f29] 'scroll-down)
+;; (global-set-key [f27] 'beginning-of-line)
+;; (global-set-key [f33] 'end-of-line)
+;; (global-set-key [f19] 'goto-line)
+;; (global-set-key [f1] 'goto-line)
+
+;; (set-background-color    "SkyBlue")
+;; (set-foreground-color    "black")
+;; (set-cursor-color    "Red")
+;; (set-mouse-color    "Yellow")  
+
+
+;;;;;;;;;;;;; used before
+
+;; (setq auto-mode-alist (cons '("\\.py$" . python-mode) auto-mode-alist))
+;; (setq interpreter-mode-alist (cons '("python" . python-mode) interpreter-mode-alist))
+;; (autoload 'python-mode "python-mode" "Python editing mode." t)
+
+;; ;; makes tab indent relative
+;; (global-set-key "\t" 'indent-relative)
+
+;; (add-hook 'dired-load-hook
+;;     (function (lambda ()
+;;             (load "dired-x")
+;;             ;; Set dired-x global variables here.  For example:
+;;             ;; (setq dired-guess-shell-gnutar "gtar")
+;;             ;; (setq dired-x-hands-off-my-keys nil)
+;;             )))
+
+;; (add-hook 'dired-mode-hook
+;;     (function (lambda ()
+;;             ;; Set dired-x buffer-local variables here.  For example:
+;;             ;; (setq dired-omit-files-p t)
+;;             )))
+
+;; ;; Set C-mode options
+;; (add-hook 'c-mode-hook
+;;       (function (lambda ()
+;;               (setq comment-column 50     ; the preferred column for comment indentation
+;;                 indent-tabs-mode nil  ; do not insert tabs, but use spaces instead
+;;                 c-indent-level 4      ; 4 spaces on every indent
+;;                 c-auto-newline nil    ; do NOT insert newlines automatically
+;;                 c-continued-statement-offset 4 ; after while, if, etc
+;;                 c-brace-offset -4     ; put braces back 4, so flush with previous line
+;;                 c-label-offset -2     ; put case labels back 2
+;;                 tab-width 8           ; self-explanatory
+;; ;;                c-tab-always-indent t
+;; ;;                c-argdecl-indent 3
+;; ;;                c-brace-imaginary-offset 0
+;; ;;                c-continued-brace-offset -3
+;; ;;                c-continued-statement-offset 3
+;; ;;                c-indent-level 3
+;; ;;              (local-set-key [return] 'newline-and-indent)
+;; ;;                )
+;;   )))
+
+;; (add-hook 'c++-mode-hook
+;;           (function
+;;            (lambda ()
+;;              (c-set-offset 'substatement-open '0)
+;;              (c-set-offset 'case-label '+) ;              (setq comment-column 35     ; the preferred column for comment indentation
+;;                    indent-tabs-mode nil  ; do not insert tabs, but use spaces instead
+;;                    c-basic-offset 4
+;;                    )
+;;          (define-key c++-mode-map "" 'newline-and-indent)
+;;          )))
+
+;;;;;;;;;;;;;;;;;;;END;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(add-hook 'text-mode-hook
+  (function
+   (lambda ()
+     (setq tab-width 4)
+     (define-key text-mode-map "\C-i" 'self-insert-command)
+     )))
+
+
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(package-initialize)
+(unless (package-installed-p 'scala-mode2)
+  (package-refresh-contents) (package-install 'scala-mode2))
+
+;;http://www.emacswiki.org/emacs/FindingNonAsciiCharacters
+(defun occur-non-ascii ()
+  "Find any non-ascii characters in the current buffer."
+  (interactive)
+  (occur "[^[:ascii:]]"))
+
+;;Clojure
+(defun cider-eval-expression-at-point-in-repl ()
+  (interactive)
+  (let ((form (cider-sexp-at-point)))
+    ;; Strip excess whitespace
+    (while (string-match "\\`\s+\\|\n+\\'" form)
+      (setq form (replace-match "" t t form)))
+    (set-buffer (cider-find-or-create-repl-buffer))
+    (goto-char (point-max))
+    (insert form)
+    (cider-repl-return)))
+
+(global-set-key [(control \`)] 'cider-eval-expression-at-point-in-repl)
+
+(show-paren-mode 1)
+
+
+;(add-to-list 'load-path "~/.emacs.d")
+;(require 'auto-complete-config)
+;(add-to-list 'ac-dictionary-directories "~/.emacs.d/dict")
+;(ac-config-default)
+
+;(add-to-list 'load-path "~/.emacs.d/scala-mode")
+;(require 'scala-mode-auto)
+
+
+;;;;; TEST CODE
+
+(defun bf-pretty-print-xml-region (begin end)
+  "Pretty format XML markup in region. You need to have nxml-mode
+http://www.emacswiki.org/cgi-bin/wiki/NxmlMode installed to do
+this.  The function inserts linebreaks to separate tags that have
+nothing but whitespace between them.  It then indents the markup
+by using nxml's indentation rules."
+  (interactive "r")
+  (save-excursion
+      (nxml-mode)
+      (goto-char begin)
+      (while (search-forward-regexp "\>[ \\t]*\<" nil t) 
+        (backward-char) (insert "\n"))
+      (indent-region begin end))
+    (message "Ah, much better!"))
+
+
+  (add-hook 'sgml-mode-hook
+    (function (lambda()
+      (define-key
+         sgml-mode-map
+         (kbd "<tab>")
+         (lambda () (interactive) (insert "\t")))
+      (define-key
+         sgml-mode-map
+         (kbd "RET") 'newline-and-indent)
+  )))
