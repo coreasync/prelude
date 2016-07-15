@@ -37,7 +37,10 @@
 
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/") t)
-            ;; '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+
+(add-to-list 'package-archives
+             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+
 ;; set package-user-dir to be relative to Prelude install path
 (setq package-user-dir (expand-file-name "elpa" prelude-dir))
 (package-initialize)
@@ -151,8 +154,8 @@ PACKAGE is installed only if not already present.  The file is opened in MODE."
     ("\\.latex\\'" auctex LaTeX-mode)
     ("\\.less\\'" less-css-mode less-css-mode)
     ("\\.lua\\'" lua-mode lua-mode)
-    ("\\.markdown\\'" markdown-mode markdown-mode)
-    ("\\.md\\'" markdown-mode markdown-mode)
+;;    ("\\.markdown\\'" markdown-mode markdown-mode)
+;;    ("\\.md\\'" markdown-mode markdown-mode)
     ("\\.ml\\'" tuareg tuareg-mode)
     ("\\.pp\\'" puppet-mode puppet-mode)
     ("\\.php\\'" php-mode php-mode)
@@ -176,9 +179,9 @@ PACKAGE is installed only if not already present.  The file is opened in MODE."
 
 ;; markdown-mode doesn't have autoloads for the auto-mode-alist
 ;; so we add them manually if it's already installed
-(when (package-installed-p 'markdown-mode)
-  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . gfm-mode))
-  (add-to-list 'auto-mode-alist '("\\.md\\'" . gfm-mode)))
+;;(when (package-installed-p 'markdown-mode)
+;;  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . gfm-mode))
+;; (add-to-list 'auto-mode-alist '("\\.md\\'" . gfm-mode)))
 
 (when (package-installed-p 'pkgbuild-mode)
   (add-to-list 'auto-mode-alist '("PKGBUILD\\'" . pkgbuild-mode)))
@@ -199,3 +202,4 @@ PACKAGE is installed only if not already present.  The file is opened in MODE."
 ;; End:
 
 ;;; prelude-packages.el ends here
+(message "done 1")

@@ -33,10 +33,13 @@
 ;;; Code:
 
 (require 'prelude-lisp)
+
+(message "starting clojure")
 (prelude-require-packages '(clojure-mode cider))
 
 (eval-after-load 'clojure-mode
-  '(progn
+                 '(progn
+                   (message "hhhhhhhh")
      (defun prelude-clojure-mode-defaults ()
        (subword-mode +1)
        (run-hooks 'prelude-lisp-coding-hook))

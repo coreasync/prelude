@@ -89,3 +89,6 @@ This functions should be added to the hooks of major modes for programming."
 
 (provide 'prelude-programming)
 ;;; prelude-programming.el ends here
+
+(message "programming done")
+

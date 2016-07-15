@@ -3,7 +3,7 @@
 ;;(setq cscope-do-not-update-database t)
 ;; for older emacs
 ;;(load-file "~/my/emacs/prev-next-buffer.el")
-;;(require 'prev-next-buffer) 
+;;(require 'prev-next-buffer)
 ;;(load-file "~/my/emacs/uniq.el")
 ;;(load-file "~/my/emacs/grep-buffers.el")
 
@@ -40,17 +40,17 @@
 (setq scroll-step 1)
 (setq next-line-add-newlines nil)
 (custom-set-faces)
-(delete-selection-mode 1) 
+(delete-selection-mode 1)
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 
 ;; better colors for putty
-;;(load "~/.emacs21-256color-hack.el") 
+;;(load "~/.emacs21-256color-hack.el")
 
 
 ;; Polish stuff
 (setq default-input-method 'polish-slash)
-(prefer-coding-system 'utf-8) 
+(prefer-coding-system 'utf-8)
 (modify-coding-system-alist 'file "\\.html\\'" 'utf-8)
 
 
@@ -69,7 +69,7 @@
 ;;    (desktop-save "~/")
 ;;    (message "Wrote desktop.")
 ;;    )
-;; (add-hook 'auto-save-hook 'desktop-auto-save t) 
+;; (add-hook 'auto-save-hook 'desktop-auto-save t)
 
 
 
@@ -84,7 +84,7 @@
   (let ((files (directory-files default-directory t regexp)))
     (while files
       (find-file (car files))
-      (setq files (cdr files))))) 
+      (setq files (cdr files)))))
 
 ;; dired find file
 (defun my-dired-do-find-file (&optional arg)
@@ -96,7 +96,8 @@
      (while file-list
        (let ((find-file-run-dired t))
          (find-file (car file-list)))
-       (setq file-list (cdr file-list))))) 
+       (setq file-list (cdr file-list)))))
+
 
 ;; what was it?
 (defun my-toggle-case (arg)
@@ -188,7 +189,7 @@
 ;; (set-background-color    "SkyBlue")
 ;; (set-foreground-color    "black")
 ;; (set-cursor-color    "Red")
-;; (set-mouse-color    "Yellow")  
+;; (set-mouse-color    "Yellow")
 
 
 ;;;;;;;;;;;;; used before
@@ -308,7 +309,7 @@ by using nxml's indentation rules."
   (save-excursion
       (nxml-mode)
       (goto-char begin)
-      (while (search-forward-regexp "\>[ \\t]*\<" nil t) 
+      (while (search-forward-regexp "\>[ \\t]*\<" nil t)
         (backward-char) (insert "\n"))
       (indent-region begin end))
     (message "Ah, much better!"))
